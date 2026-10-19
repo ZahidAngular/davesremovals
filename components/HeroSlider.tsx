@@ -8,6 +8,16 @@ import { ArrowRight, Phone } from "lucide-react";
 import { HOME, SITE } from "@/lib/content";
 import { WatchVideoButton } from "./VideoModal";
 
+function Title({ text }: { text: string }) {
+  const words = text.split(" ");
+  const last = words.pop();
+  return (
+    <>
+      {words.join(" ")} <em className="font-light italic text-gold-soft">{last}</em>
+    </>
+  );
+}
+
 export function HeroSlider() {
   const [i, setI] = useState(0);
   const slides = HOME.heroSlides;
@@ -22,16 +32,17 @@ export function HeroSlider() {
       <AnimatePresence mode="sync">
         <motion.div
           key={i}
-          initial={{ opacity: 0, scale: 1.12 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 1.14 }}
+          animate={{ opacity: 1, scale: 1.02 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.8, ease: "easeOut" }}
+          transition={{ opacity: { duration: 1.6 }, scale: { duration: 8, ease: "linear" } }}
           className="absolute inset-0 -z-20"
         >
-          <Image src={slides[i].image} alt="" fill priority sizes="100vw" className="object-cover" />
+          <Image src={slides[i].image} alt="" fill priority sizes="100vw" className="object-cover grayscale-[0.35] contrast-105" />
         </motion.div>
       </AnimatePresence>
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgba(6,13,26,0.97)_8%,rgba(6,13,26,0.78)_52%,rgba(6,13,26,0.45)_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[#0a1730]/25 mix-blend-multiply" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgba(6,13,26,0.94)_10%,rgba(6,13,26,0.62)_50%,rgba(6,13,26,0.2)_100%)]" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(50%_60%_at_80%_20%,rgba(201,164,92,0.25),transparent_70%)]" />
 
       <div className="container-x grid items-center gap-14 pb-28 pt-40 lg:grid-cols-[1.25fr_0.75fr]">
@@ -55,7 +66,7 @@ export function HeroSlider() {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h1 className="font-display text-5xl leading-[1.02] sm:text-6xl md:text-[5.5rem]">
-                  {slides[i].title}
+                  <Title text={slides[i].title} />
                 </h1>
                 <p className="mt-6 max-w-xl text-xl text-white/75">{slides[i].text}</p>
               </motion.div>
@@ -73,7 +84,7 @@ export function HeroSlider() {
 
           <div className="mt-10 flex items-center justify-between gap-6">
             <WatchVideoButton />
-            <Link href="/moving-estimate" aria-label="Free quote — click here" className="block w-24 rotate-[8deg] lg:hidden">
+            <Link href="/moving-estimate" aria-label="Free quote — click here" className="block w-24 shrink-0 rotate-[8deg] lg:hidden">
               <Image src="/img/request-quote.png" alt="Free Quote — Click Here" width={188} height={189} className="h-auto w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.45)]" />
             </Link>
           </div>

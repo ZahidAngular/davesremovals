@@ -43,6 +43,7 @@ body {
   letter-spacing: -0.02em;
 }
 
+@layer components {
 /* ---------- reusable atoms ---------- */
 .eyebrow {
   display: inline-flex;
@@ -187,6 +188,8 @@ select.field {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23c9a45c' stroke-width='2'><path d='M1 1l5 5 5-5'/></svg>");
   background-repeat: no-repeat;
   background-position: right 0.2rem center;
+}
+
 }
 
 /* marquee */

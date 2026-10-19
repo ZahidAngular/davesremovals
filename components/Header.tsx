@@ -9,18 +9,44 @@ import { NAV, SITE } from "@/lib/content";
 
 type NavChild = { label: string; href: string; external?: boolean };
 
+/** Isometric moving-box mark. */
+export function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden>
+      <defs>
+        <linearGradient id="lm-top" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f3e3bd" />
+          <stop offset="1" stopColor="#d7b46e" />
+        </linearGradient>
+        <linearGradient id="lm-left" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#c9a45c" />
+          <stop offset="1" stopColor="#a8803a" />
+        </linearGradient>
+        <linearGradient id="lm-right" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#9c7634" />
+          <stop offset="1" stopColor="#6f5122" />
+        </linearGradient>
+      </defs>
+      <rect x="1" y="1" width="46" height="46" rx="13" fill="#0a1730" stroke="rgba(201,164,92,0.45)" />
+      <path d="M24 9 37 16.5 24 24 11 16.5Z" fill="url(#lm-top)" />
+      <path d="M11 16.5 24 24v15L11 31.5Z" fill="url(#lm-left)" />
+      <path d="M37 16.5 24 24v15l13-7.5Z" fill="url(#lm-right)" />
+      <path d="M17.5 12.75 30.5 20.25" stroke="#0a1730" strokeOpacity=".55" strokeWidth="2.2" />
+      <path d="M30.5 20.25v6.5" stroke="#0a1730" strokeOpacity=".4" strokeWidth="2.2" />
+    </svg>
+  );
+}
+
 export function Logo({ light = true }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-3">
-      <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-gold-soft via-gold to-[#a8803a] font-display text-xl font-semibold text-ink">
-        D
-      </span>
+      <LogoMark className="h-11 w-11 shrink-0" />
       <span className="leading-none">
-        <span className={`block whitespace-nowrap font-display text-xl font-medium ${light ? "text-white" : "text-ink"}`}>
-          Dave&apos;s Removal Service
+        <span className={`block whitespace-nowrap font-display text-[1.35rem] font-medium tracking-tight ${light ? "text-white" : "text-ink"}`}>
+          Dave&apos;s <span className="italic text-gold-soft">Removals</span>
         </span>
-        <span className="mt-1 block whitespace-nowrap text-[0.6rem] font-semibold uppercase tracking-[0.32em] text-gold">
-          Removals &amp; Storage
+        <span className="mt-1.5 block whitespace-nowrap text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-gold">
+          &amp; Storage · Wollongong
         </span>
       </span>
     </span>
@@ -30,7 +56,9 @@ export function Logo({ light = true }: { light?: boolean }) {
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  // Menu is tied to the path it was opened on, so navigating closes it.
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const open = openOn === pathname;
   const [mobileSub, setMobileSub] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,10 +67,6 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -134,7 +158,7 @@ export function Header() {
               Get a Quote
             </Link>
             <button
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => setOpenOn(open ? null : pathname)}
               aria-label="Toggle navigation"
               className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white lg:hidden"
             >

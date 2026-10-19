@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { SITE } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Video Introduction" };
 

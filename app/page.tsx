@@ -1,12 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Boxes, Briefcase, Building2, Globe2, Home as HomeIcon, Mail, MapPin, Phone, Quote, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award, Boxes, Briefcase, Globe2, Mail, MapPin, Phone, Quote, type LucideIcon } from "lucide-react";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Counter, Reveal } from "@/components/ui";
 import { SectionHead } from "@/components/PageHero";
-import { ContactForm } from "@/components/Forms";import { HOME, HOME_TESTIMONIALS, SERVICES_HOME, SITE } from "@/lib/content";
+import { ContactForm } from "@/components/Forms";
+import { HOME, HOME_TESTIMONIALS, SERVICES_HOME, SITE } from "@/lib/content";
 
-const icons = [HomeIcon, Globe2, Briefcase, Boxes, Building2, ShieldCheck];
+const BENTO: { idx: number; image?: string; icon?: LucideIcon }[] = [
+  { idx: 0, image: "/img/residential-removals.jpg" },
+  { idx: 1, icon: Globe2 },
+  { idx: 2, icon: Briefcase },
+  { idx: 4, image: "/img/commercial-removals.jpg" },
+  { idx: 3, icon: Boxes },
+  { idx: 5, image: "/img/home-v1-slider-03.jpg" },
+];
 
 export default function HomePage() {
   const suburbs = HOME.suburbs.replace(/\.$/, "").split(/,\s*(?:and\s+)?/);
@@ -14,46 +22,59 @@ export default function HomePage() {
     <>
       <HeroSlider />
 
+      {/* Trust bar */}
+      <section className="relative z-10 border-b border-ink/10 bg-paper">
+        <div className="container-x grid grid-cols-2 divide-ink/10 lg:grid-cols-5 lg:divide-x">
+          {[
+            { k: "87", l: "Years of combined experience" },
+            { k: "20", l: "Years in the business" },
+            { k: "$100k", l: "Full Transit Insurance" },
+          ].map((x) => (
+            <div key={x.l} className="flex items-center gap-4 py-7 lg:justify-center lg:px-6">
+              <span className="font-display text-4xl text-ink md:text-5xl">{x.k}</span>
+              <span className="max-w-[9rem] text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-muted">{x.l}</span>
+            </div>
+          ))}
+          <a href={SITE.threeBestRated} target="_blank" rel="noreferrer" className="group flex items-center gap-4 py-7 lg:justify-center lg:px-6">
+            <Image src="/img/threebestrated.svg" alt="" width={56} height={56} className="h-14 w-14 transition group-hover:scale-110" unoptimized />
+            <span className="max-w-[9rem] text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-muted">Best Moving companies in Nowra</span>
+          </a>
+          <a href={SITE.homeImprovement} target="_blank" rel="noreferrer" className="group col-span-2 flex items-center gap-4 py-7 lg:col-span-1 lg:justify-center lg:px-6">
+            <Award className="h-10 w-10 shrink-0 text-gold transition group-hover:scale-110" strokeWidth={1.25} />
+            <span className="max-w-[11rem] text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-muted">{HOME.award}</span>
+          </a>
+        </div>
+      </section>
+
       {/* Intro */}
       <section className="section relative overflow-hidden">
-        <div className="container-x grid items-start gap-16 lg:grid-cols-[0.9fr_1.1fr]">
-          <Reveal>
+        <Image src="/img/home-v1-clients-bg.jpg" alt="" fill sizes="100vw" className="pointer-events-none -z-10 object-cover opacity-40 mix-blend-multiply" />
+        <div className="container-x grid items-start gap-14 lg:grid-cols-12">
+          <Reveal className="lg:col-span-5">
             <p className="eyebrow mb-6">Dave&apos;s Removals &amp; Storage</p>
-            <h2 className="font-display text-4xl leading-[1.05] md:text-6xl">{HOME.introTitle}</h2>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <a href={SITE.threeBestRated} target="_blank" rel="noreferrer">
-                <Image src="/img/threebestrated.svg" alt="Three Best Rated — Best Moving companies in Nowra" width={112} height={112} className="h-28 w-28" unoptimized />
-              </a>
-              <a
-                href={SITE.homeImprovement}
-                target="_blank"
-                rel="noreferrer"
-                className="group max-w-[16rem] border-l-2 border-gold pl-5 text-sm font-semibold uppercase tracking-[0.15em] text-ink"
-              >
-                {HOME.award}
-                <ArrowUpRight size={16} className="ml-1 inline text-gold transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </a>
-            </div>
-            <div className="mt-12 rounded-3xl bg-navy p-8 text-white">
-              <p className="eyebrow mb-4">Book your move</p>
-              <a href={SITE.phoneHref} className="font-display gold-text block text-4xl">{SITE.phone}</a>
-              <p className="mt-3 text-sm text-white/65">{HOME.cta}</p>
-              <Link href="/moving-estimate" className="btn btn-gold mt-6">Get a Quote <ArrowRight size={16} /></Link>
-            </div>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="font-display text-2xl leading-snug text-ink md:text-3xl">{HOME.intro[0]}</p>
-            <div className="mt-8 space-y-5 text-[1.05rem] leading-8 text-muted">
-              {HOME.intro.slice(1).map((p) => (
-                <p key={p.slice(0, 24)} className="whitespace-pre-line">{p}</p>
-              ))}
-              <p>
+            <h2 className="font-display text-balance text-4xl leading-[1.05] md:text-6xl">{HOME.introTitle}</h2>
+            <div className="relative mt-10 overflow-hidden rounded-3xl bg-navy p-8 text-white">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gold/25 blur-[70px]" />
+              <a href={SITE.phoneHref} className="font-display gold-text relative block text-4xl">{SITE.phone}</a>
+              <p className="relative mt-4 text-sm leading-7 text-white/70">
                 {HOME.introCallBefore}
-                <Link href="/moving-estimate" className="font-semibold text-ink underline decoration-gold decoration-2 underline-offset-4">
+                <Link href="/moving-estimate" className="font-semibold text-gold-soft underline decoration-gold/60 underline-offset-4">
                   {HOME.introCallLink}
                 </Link>
                 {HOME.introCallAfter}
               </p>
+              <Link href="/moving-estimate" className="btn btn-gold relative mt-6">Get a Quote <ArrowRight size={16} /></Link>
+            </div>
+          </Reveal>
+          <Reveal delay={0.12} className="lg:col-span-7">
+            <p className="font-display text-balance text-2xl leading-snug text-ink md:text-[2rem]">{HOME.intro[0]}</p>
+            <div className="hairline my-10" />
+            <div className="gap-10 text-[0.98rem] leading-8 text-muted md:columns-2 [&>p]:mb-5 [&>p]:break-inside-avoid">
+              {HOME.intro.slice(1).map((p, idx) => (
+                <p key={p.slice(0, 24)} className={idx === 0 ? "first-letter:float-left first-letter:mr-3 first-letter:font-display first-letter:text-6xl first-letter:leading-[0.85] first-letter:text-gold" : ""}>
+                  {p}
+                </p>
+              ))}
             </div>
           </Reveal>
         </div>
@@ -63,23 +84,38 @@ export default function HomePage() {
       <section className="section bg-ivory">
         <div className="container-x">
           <Reveal>
-            <SectionHead eyebrow="What we do" title={HOME.servicesTitle} sub={HOME.servicesSub} />
+            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+              <SectionHead eyebrow="What we do" title={HOME.servicesTitle} />
+              <p className="max-w-sm text-lg text-muted lg:text-right">{HOME.servicesSub}</p>
+            </div>
           </Reveal>
-          <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-ink/10 bg-ink/10 md:grid-cols-2 lg:grid-cols-3">
-            {SERVICES_HOME.map((s, i) => {
-              const Icon = icons[i];
+          <div className="mt-14 grid auto-rows-[minmax(19rem,auto)] gap-5 lg:grid-cols-3">
+            {BENTO.map(({ idx, image, icon: Icon }, n) => {
+              const s = SERVICES_HOME[idx];
+              const num = String(idx + 1).padStart(2, "0");
               return (
-                <Reveal key={s.title} delay={(i % 3) * 0.08} className="h-full">
-                  <div className="group relative h-full overflow-hidden bg-paper p-9 transition-colors duration-500 hover:bg-navy md:p-11">
-                    <span className="font-display absolute right-7 top-5 text-7xl text-ink/[0.06] transition-colors group-hover:text-white/10">
-                      0{i + 1}
-                    </span>
-                    <span className="grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold transition group-hover:bg-gold group-hover:text-ink">
-                      <Icon size={24} />
-                    </span>
-                    <h3 className="font-display mt-8 text-3xl transition-colors group-hover:text-white">{s.title}</h3>
-                    <p className="mt-4 leading-7 text-muted transition-colors group-hover:text-white/70">{s.text}</p>
-                  </div>
+                <Reveal key={s.title} delay={(n % 2) * 0.08} className={image ? "lg:col-span-2" : ""}>
+                  {image ? (
+                    <Link href="/moving-estimate" className="group relative isolate flex h-full min-h-[19rem] flex-col justify-end overflow-hidden rounded-[1.75rem] p-8 text-white md:p-10">
+                      <Image src={image} alt="" fill sizes="(min-width:1024px) 66vw, 100vw" className="-z-20 object-cover transition duration-[1.4s] ease-out group-hover:scale-105" />
+                      <span className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgba(6,13,26,0.92)_0%,rgba(6,13,26,0.45)_55%,rgba(6,13,26,0.15)_100%)]" />
+                      <span className="font-display absolute right-8 top-6 text-6xl text-white/25">{num}</span>
+                      <span className="absolute right-8 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 opacity-0 transition duration-500 group-hover:opacity-100">
+                        <ArrowUpRight size={20} />
+                      </span>
+                      <h3 className="font-display text-3xl md:text-4xl">{s.title}</h3>
+                      <p className="mt-3 max-w-lg leading-7 text-white/75">{s.text}</p>
+                    </Link>
+                  ) : (
+                    <div className="group flex h-full min-h-[19rem] flex-col rounded-[1.75rem] border border-ink/10 bg-paper p-8 transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-35px_rgba(10,23,48,0.45)] md:p-10">
+                      <div className="flex items-start justify-between">
+                        {Icon && <Icon className="h-10 w-10 text-gold" strokeWidth={1.25} />}
+                        <span className="font-display text-5xl text-ink/10">{num}</span>
+                      </div>
+                      <h3 className="font-display mt-auto pt-10 text-3xl">{s.title}</h3>
+                      <p className="mt-3 leading-7 text-muted">{s.text}</p>
+                    </div>
+                  )}
                 </Reveal>
               );
             })}
